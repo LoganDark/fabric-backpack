@@ -1,33 +1,33 @@
 {
 	"schemaVersion": 1,
-	"id": "barebones",
+	"id": "backpack",
 	"version": "${version}",
 
-	"name": "Barebones",
+	"name": "Backpack",
 	"description": "Congrats, you made it work!",
 	"authors": ["LoganDark"],
 	"contact": {
-		"sources": "https://github.com/LoganDark/fabric-barebones",
-		"website": "https://github.com/LoganDark/fabric-barebones",
-		"issues": "https://github.com/LoganDark/fabric-barebones/issues"
+		"sources": "https://github.com/LoganDark/fabric-backpack",
+		"website": "https://github.com/LoganDark/fabric-backpack",
+		"issues": "https://github.com/LoganDark/fabric-backpack/issues"
 	},
 
 	"custom": {},
 
 	"license": "GPLv3",
-	"icon": "assets/barebones/icon.png",
+	"icon": "assets/backpack/icon.png",
 
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			{
 				"adapter": "kotlin",
-				"value": "net.logandark.barebones.Barebones"
+				"value": "net.logandark.backpack.Backpack"
 			}
 		]
 	},
 
-	"mixins": ["barebones.mixins.json"],
+	"mixins": ["backpack.mixins.json"],
 
 	"depends": {
 		"fabricloader": ">=0.8.8",
