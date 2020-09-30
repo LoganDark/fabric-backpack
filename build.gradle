@@ -15,29 +15,42 @@ minecraft {}
 
 repositories {
 	maven { url = 'http://maven.fabricmc.net/' }
+
+	// Cardinal Components API
+	maven { url = 'https://dl.bintray.com/ladysnake/libs' }
 }
 
 dependencies {
-	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	// Fabric Loader actually doesn't contain much Minecraft-specific
+	// functionality, so we need a Fabric API module to load our mod's resource
+	// pack. Without this module, the backpack won't have a name or texture.
+	//noinspection GroovyAssignabilityCheck
+	modImplementation(fabricApi.module('fabric-resource-loader-v0', project.fabric_version))
 
+	// This mod provides the Kotlin standard library, which is needed for just
+	// about any basic feature of the language. You could write Kotlin without
+	// using its standard library, but it would be absolute hell.
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-	include "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	//modImplementation(fabricApi.module('fabric-resource-loader-v0', project.fabric_version))
-	//modImplementation('io.github.prospector:modmenu:1.14.6+build.31') {
-	//	exclude module: 'fabric-api' // includes bad Fabric API
-	//}
+	// We need Cardinal Components Base for Cardinal Components Item, which we
+	// use to store the inventory on the item. It makes things easy for us and
+	// as a bonus allows other mods to operate on the backpack if needed.
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+	// Include those two mods as well, as a jar-in-jar. Fabric Loader will look
+	// inside our mod, see these, and attempt to load them as well (as long as
+	// there's no newer version in the mods folder).
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 }
 
+// This just handles turning ${version} in the fabric.mod.json into the mod's
+// actual version.
 processResources {
 	inputs.property 'version', project.version
 
@@ -66,6 +79,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 	from sourceSets.main.allSource
 }
 
+// Puts LICENSE inside the generated jar
 jar {
 	from 'LICENSE'
 }
@@ -90,6 +104,11 @@ publishing {
 		// uncomment to publish to the local maven
 		// mavenLocal()
 
+		// I personally use a setup where ~/maven is a Git repository. I can run
+		// the `publish` task from my IDE, commit the changes to the repository
+		// and then `git push` it straight to `maven.logandark.net`. You may
+		// want to adopt a similar model, or you may want to try something
+		// completely different. This is by far the simplest, in my opinion.
 		maven {
 			url = uri(file(System.properties['user.home'] + '/maven'))
 		}

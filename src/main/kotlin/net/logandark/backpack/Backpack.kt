@@ -1,14 +1,15 @@
 package net.logandark.backpack
 
 import net.fabricmc.api.ModInitializer
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import net.logandark.backpack.item.BackpackItem
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 
 @Suppress("unused")
 object Backpack : ModInitializer {
-	val logger: Logger = LogManager.getLogger()
-
+	// This is where the tour starts. First, the BackpackItem is added to the
+	// item registry. Go there to continue on!
 	override fun onInitialize() {
-		logger.info("Hello Fabric world!")
+		Registry.register(Registry.ITEM, Identifier("backpack", "backpack"), BackpackItem)
 	}
 }

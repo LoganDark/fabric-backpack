@@ -12,7 +12,9 @@
 		"issues": "https://github.com/LoganDark/fabric-backpack/issues"
 	},
 
-	"custom": {},
+	"custom": {
+		"cardinal-components": ["backpack:inventory"]
+	},
 
 	"license": "GPLv3",
 	"icon": "assets/backpack/icon.png",
@@ -24,10 +26,16 @@
 				"adapter": "kotlin",
 				"value": "net.logandark.backpack.Backpack"
 			}
+		],
+		"cardinal-components-item": [
+			{
+				"adapter": "kotlin",
+				"value": "net.logandark.backpack.item.BackpackItem"
+			}
 		]
 	},
 
-	"mixins": ["backpack.mixins.json"],
+	"mixins": [],
 
 	"depends": {
 		"fabricloader": ">=0.8.8",
